@@ -1,0 +1,16 @@
+[
+  {
+    "id": "PROD001",
+    "title": "Red Summer Dress",
+    "price": 1299,
+    "currency": "INR",
+    "sizes": ["S", "M", "L"],
+    "colors": ["red"],
+    "description": "Lightweight cotton dress perfect for summer outings.",
+    "tags": ["summer", "casual", "dress"],
+    "category": "dress",
+    "gender": "women",
+    "image_url": "https://example.com/red-dress.jpg",
+    "stock": 15
+  }
+]
