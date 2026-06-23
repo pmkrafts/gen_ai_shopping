@@ -4,6 +4,7 @@ from .order import Order, OrderItem
 from .profile import UserProfile
 from .chat import ChatMessage
 from .response import AgentResponse
+from .styling_session import StylingSession
 
 __all__ = [
     "Product",
@@ -14,4 +15,5 @@ __all__ = [
     "UserProfile",
     "ChatMessage",
     "AgentResponse",
+    "StylingSession",
 ]

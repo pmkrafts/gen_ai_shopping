@@ -5,6 +5,10 @@ from .manage_cart import manage_cart_tool
 from .size_fit_advisor import size_fit_advisor_tool
 from .budget_occasion_planner import budget_occasion_planner_tool
 from .get_trending_styles import get_trending_styles_tool
+from .analyze_image import analyze_image_tool
+from .image_search import image_search_tool
+from .manage_wishlist import manage_wishlist_tool
+from .process_order import process_order_tool
 
 __all__ = [
     "search_products_tool",
@@ -14,4 +18,8 @@ __all__ = [
     "size_fit_advisor_tool",
     "budget_occasion_planner_tool",
     "get_trending_styles_tool",
+    "analyze_image_tool",
+    "image_search_tool",
+    "manage_wishlist_tool",
+    "process_order_tool",
 ]
