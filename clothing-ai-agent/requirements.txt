@@ -1,0 +1,9 @@
+langchain
+langchain-openai
+pydantic
+python-dotenv
+fastapi
+uvicorn
+pymongo[srv]
+pytest
+ruff
