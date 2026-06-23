@@ -9,13 +9,17 @@ from tools import (
     get_product_details_tool,
     get_recommendations_tool,
     manage_cart_tool,
+    size_fit_advisor_tool,
+    budget_occasion_planner_tool,
+    get_trending_styles_tool,
 )
 from models.response import AgentResponse
 
 load_dotenv()
 
 SYSTEM_PROMPT = """You are a helpful AI shopping assistant for a clothing store.
-You can search products, show details, give recommendations, and manage the cart.
+You can search products, show details, give recommendations, manage the cart,
+advise on size & fit, plan outfits by budget and occasion, and suggest trending styles.
 Always respond with a friendly, concise reply and suggest one or two next actions.
 """
 
@@ -27,6 +31,9 @@ def build_agent():
         get_product_details_tool,
         get_recommendations_tool,
         manage_cart_tool,
+        size_fit_advisor_tool,
+        budget_occasion_planner_tool,
+        get_trending_styles_tool,
     ]
 
     agent = create_react_agent(llm, tools, prompt=SYSTEM_PROMPT)
