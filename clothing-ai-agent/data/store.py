@@ -22,6 +22,18 @@ def get_product_by_id(product_id: str) -> Product | None:
     return None
 
 
+def _matches_query(product: Product, query: str) -> bool:
+    """Check if all words in query match the product text (word-level substring)."""
+    text = f"{product.title} {product.description} {' '.join(product.tags)}"
+    text_words = text.lower().split()
+    query_words = [w for w in query.lower().split() if w]
+
+    for qw in query_words:
+        if not any(qw in tw or tw in qw for tw in text_words):
+            return False
+    return True
+
+
 def search_products(
     query: str | None = None,
     filters: dict[str, Any] | None = None,
@@ -31,8 +43,7 @@ def search_products(
     results = []
 
     for product in products:
-        text = f"{product.title} {product.description} {' '.join(product.tags)}"
-        if query and query.lower() not in text.lower():
+        if query and not _matches_query(product, query):
             continue
 
         match = True
