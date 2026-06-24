@@ -10,6 +10,9 @@ Agent: [calls search_products]
 User: Add PROD001 to my cart
 Agent: [calls manage_cart with action=add]
 
+User: Change PROD001 to size L
+Agent: [calls manage_cart with action=update]
+
 User: I'm 5'10", 75kg, broad shoulders. What size shirt?
 Agent: [calls size_fit_advisor]
 

@@ -14,7 +14,23 @@ def manage_cart_tool(
 
     Args:
         action: One of add, remove, update, clear, show.
-        items: List of items, each with product_id, quantity, size, color.
+        items: List of items. Each item must include product_id, quantity, size, and color.
+
+    Examples:
+        Add an item:
+            action="add", items=[{"product_id": "PROD001", "quantity": 1, "size": "M", "color": "red"}]
+
+        Update an item (replaces the existing item with the same product_id):
+            action="update", items=[{"product_id": "PROD001", "quantity": 1, "size": "L", "color": "red"}]
+
+        Remove an item:
+            action="remove", items=[{"product_id": "PROD001"}]
+
+        Show cart:
+            action="show"
+
+        Clear cart:
+            action="clear"
     """
     global _cart
     items = items or []
