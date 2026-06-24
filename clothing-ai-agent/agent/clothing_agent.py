@@ -23,16 +23,12 @@ from tools import (
     process_order_tool,
 )
 from agent.styling_session_store import create_session, update_session, get_session
+from agent.guardrails import apply_guardrails
+from agent.utils import retry
+from agent.prompts import SYSTEM_PROMPT
 from models.response import AgentResponse
 
 load_dotenv()
-
-SYSTEM_PROMPT = """You are a helpful AI shopping assistant for a clothing store.
-You can search products, show details, give recommendations, manage the cart and wishlist,
-advise on size & fit, plan outfits by budget and occasion, suggest trending styles,
-analyze clothing images, search by image, process orders, and run multi-turn styling sessions.
-Always respond with a friendly, concise reply and suggest one or two next actions.
-"""
 
 # Module-level agent instance so it is built only once.
 _agent = None
@@ -75,7 +71,7 @@ def _extract_tool_calls(messages: list[BaseMessage]) -> list[dict]:
             tool_calls.append({
                 "type": "tool_result",
                 "tool_call_id": getattr(msg, "tool_call_id", None),
-                "content": getattr(msg, "content", None)[:200],
+                "content": str(getattr(msg, "content", ""))[:200],
             })
     return tool_calls
 
@@ -158,13 +154,22 @@ def run_agent(
     chat_history: list | None = None,
     session_id: str = "default",
 ) -> dict:
-    """Run the agent with conversation memory, styling sessions, and logging.
+    """Run the agent with guardrails, conversation memory, styling sessions, retries, and logging.
 
     Args:
         input_text: The current user message.
         chat_history: Optional list of previous messages. Used if no session memory exists.
         session_id: Identifier for the conversation session.
     """
+    # Day 25: Guardrails.
+    allowed, guardrail_message = apply_guardrails(input_text)
+    if not allowed:
+        _log_event(
+            "guardrail_blocked",
+            {"session_id": session_id, "input": input_text, "message": guardrail_message},
+        )
+        return AgentResponse(reply=guardrail_message, products=[]).model_dump()
+
     agent = _get_agent()
     memory = get_memory(session_id)
 
@@ -172,7 +177,7 @@ def run_agent(
     if chat_history and not memory:
         memory.extend(_convert_chat_history(chat_history))
 
-    # Manage styling session state.
+    # Day 23: Manage styling session state.
     if _detect_styling_intent(input_text):
         session = get_session()
         if session is None:
@@ -188,25 +193,30 @@ def run_agent(
         )
     messages.append(HumanMessage(content=input_text))
 
+    # Day 26: Retry logic for agent invocation.
+    def _invoke():
+        return agent.invoke({"messages": messages})
+
     try:
-        raw = agent.invoke({"messages": messages})
+        raw = retry(_invoke, max_retries=2)
         output = raw["messages"][-1].content
         error = None
     except Exception as e:
         output = "I'm sorry, something went wrong. Please try again."
         error = str(e)
+        raw = {"messages": []}
 
     # Persist this turn in memory.
     memory.append(HumanMessage(content=input_text))
     memory.append(AIMessage(content=output))
 
-    # Log the interaction.
+    # Day 24/29: Log the interaction.
     _log_event(
         "agent_run",
         {
             "session_id": session_id,
             "input": input_text,
-            "tool_calls": _extract_tool_calls(raw.get("messages", [])) if "raw" in locals() else [],
+            "tool_calls": _extract_tool_calls(raw.get("messages", [])),
             "output": output,
             "error": error,
         },
