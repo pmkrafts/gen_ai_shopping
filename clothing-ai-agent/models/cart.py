@@ -14,6 +14,5 @@ class Cart(BaseModel):
 
     def total(self, price_lookup: dict[str, float]) -> float:
         return sum(
-            price_lookup.get(item.product_id, 0) * item.quantity
-            for item in self.items
+            price_lookup.get(item.product_id, 0) * item.quantity for item in self.items
         )

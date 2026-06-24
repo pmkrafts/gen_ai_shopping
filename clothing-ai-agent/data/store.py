@@ -52,9 +52,13 @@ def search_products(
                 match = False
             elif key == "max_price" and product.price > value:
                 match = False
-            elif key == "color" and value.lower() not in [c.lower() for c in product.colors]:
+            elif key == "color" and value.lower() not in [
+                c.lower() for c in product.colors
+            ]:
                 match = False
-            elif key == "size" and value.upper() not in [s.upper() for s in product.sizes]:
+            elif key == "size" and value.upper() not in [
+                s.upper() for s in product.sizes
+            ]:
                 match = False
             elif key == "category" and product.category.lower() != value.lower():
                 match = False

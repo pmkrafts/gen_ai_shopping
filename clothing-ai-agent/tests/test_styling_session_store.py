@@ -1,4 +1,9 @@
-from agent.styling_session_store import create_session, get_session, update_session, clear_session
+from agent.styling_session_store import (
+    create_session,
+    get_session,
+    update_session,
+    clear_session,
+)
 
 
 def test_create_and_get_session():

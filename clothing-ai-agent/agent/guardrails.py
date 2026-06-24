@@ -1,4 +1,3 @@
-import re
 from typing import Tuple
 
 # Simple keyword lists. Expand these as needed for production.
@@ -46,12 +45,21 @@ def apply_guardrails(text: str) -> Tuple[bool, str]:
     response the agent should return instead of processing the input.
     """
     if not text or not text.strip():
-        return False, "I didn't catch that. Could you please say something about clothing or shopping?"
+        return (
+            False,
+            "I didn't catch that. Could you please say something about clothing or shopping?",
+        )
 
     if has_profanity(text):
-        return False, "Please keep the conversation respectful. I'm here to help with clothing and shopping."
+        return (
+            False,
+            "Please keep the conversation respectful. I'm here to help with clothing and shopping.",
+        )
 
     if is_off_topic(text):
-        return False, "I'm a clothing store assistant, so I can only help with fashion, outfits, products, and shopping. Let me know how I can help with that!"
+        return (
+            False,
+            "I'm a clothing store assistant, so I can only help with fashion, outfits, products, and shopping. Let me know how I can help with that!",
+        )
 
     return True, ""

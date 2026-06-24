@@ -4,7 +4,9 @@ from data.store import search_products
 
 
 @tool
-def get_recommendations_tool(user_preferences: dict[str, Any], cart_items: list[dict] | None = None) -> list[dict[str, Any]]:
+def get_recommendations_tool(
+    user_preferences: dict[str, Any], cart_items: list[dict] | None = None
+) -> list[dict[str, Any]]:
     """Recommend products based on user preferences and current cart items.
 
     Args:
@@ -17,6 +19,8 @@ def get_recommendations_tool(user_preferences: dict[str, Any], cart_items: list[
     if "category" in user_preferences:
         filters["category"] = user_preferences["category"]
 
-    query = user_preferences.get("style", "") + " " + user_preferences.get("occasion", "")
+    query = (
+        user_preferences.get("style", "") + " " + user_preferences.get("occasion", "")
+    )
     results = search_products(query=query, filters=filters)
     return [p.model_dump() for p in results[:5]]

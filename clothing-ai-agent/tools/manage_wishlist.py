@@ -5,7 +5,10 @@ _wishlist: list[str] = []
 
 
 @tool
-def manage_wishlist_tool(action: Literal["add", "remove", "clear", "list"], product_ids: list[str] | None = None) -> list[str]:
+def manage_wishlist_tool(
+    action: Literal["add", "remove", "clear", "list"],
+    product_ids: list[str] | None = None,
+) -> list[str]:
     """Manage the user's wishlist."""
     global _wishlist
     product_ids = product_ids or []

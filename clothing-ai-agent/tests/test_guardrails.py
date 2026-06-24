@@ -1,4 +1,4 @@
-from agent.guardrails import apply_guardrails, is_off_topic, has_profanity, price_sanity_check
+from agent.guardrails import apply_guardrails, has_profanity, price_sanity_check
 
 
 def test_apply_guardrails_allows_shopping_query():

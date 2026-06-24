@@ -17,7 +17,9 @@ def process_order_tool(customer_name: str, shipping_address: str) -> dict:
         order_id=str(uuid.uuid4())[:8].upper(),
         customer_name=customer_name,
         items=items,
-        total=sum(item.quantity * 999 for item in items),  # Replace with real price lookup
+        total=sum(
+            item.quantity * 999 for item in items
+        ),  # Replace with real price lookup
     )
     manage_cart_tool.invoke({"action": "clear"})
     return order.model_dump()

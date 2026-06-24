@@ -1,6 +1,5 @@
 import json
 import logging
-import os
 from datetime import datetime
 from pathlib import Path
 
@@ -63,17 +62,21 @@ def _extract_tool_calls(messages: list[BaseMessage]) -> list[dict]:
     for msg in messages:
         if hasattr(msg, "tool_calls") and msg.tool_calls:
             for tc in msg.tool_calls:
-                tool_calls.append({
-                    "type": "tool_call",
-                    "name": getattr(tc, "name", None),
-                    "args": getattr(tc, "args", None),
-                })
+                tool_calls.append(
+                    {
+                        "type": "tool_call",
+                        "name": getattr(tc, "name", None),
+                        "args": getattr(tc, "args", None),
+                    }
+                )
         elif isinstance(msg, ToolMessage):
-            tool_calls.append({
-                "type": "tool_result",
-                "tool_call_id": getattr(msg, "tool_call_id", None),
-                "content": str(getattr(msg, "content", ""))[:200],
-            })
+            tool_calls.append(
+                {
+                    "type": "tool_result",
+                    "tool_call_id": getattr(msg, "tool_call_id", None),
+                    "content": str(getattr(msg, "content", ""))[:200],
+                }
+            )
     return tool_calls
 
 
@@ -168,7 +171,11 @@ def run_agent(
     if not allowed:
         _log_event(
             "guardrail_blocked",
-            {"session_id": session_id, "input": input_text, "message": guardrail_message},
+            {
+                "session_id": session_id,
+                "input": input_text,
+                "message": guardrail_message,
+            },
         )
         return AgentResponse(reply=guardrail_message, products=[]).model_dump()
 
@@ -184,7 +191,9 @@ def run_agent(
         session = get_session()
         if session is None:
             create_session(goal=input_text)
-        update_session(turn_count=(get_session().turn_count + 1 if get_session() else 1))
+        update_session(
+            turn_count=(get_session().turn_count + 1 if get_session() else 1)
+        )
 
     # Build message list from memory + styling context + current input.
     messages = list(memory)
@@ -228,7 +237,12 @@ def run_agent(
     try:
         return AgentResponse(reply=output, products=[]).model_dump()
     except Exception:
-        return {"reply": str(output), "products": [], "cart": None, "suggested_actions": []}
+        return {
+            "reply": str(output),
+            "products": [],
+            "cart": None,
+            "suggested_actions": [],
+        }
 
 
 def clear_memory(session_id: str = "default") -> None:
@@ -240,4 +254,5 @@ def clear_memory(session_id: str = "default") -> None:
 def clear_styling_session() -> None:
     """Clear the active styling session."""
     from agent.styling_session_store import clear_session
+
     clear_session()

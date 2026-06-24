@@ -4,7 +4,9 @@ from data.store import search_products
 
 
 @tool
-def search_products_tool(query: str, filters: dict[str, Any] | None = None) -> list[dict[str, Any]]:
+def search_products_tool(
+    query: str, filters: dict[str, Any] | None = None
+) -> list[dict[str, Any]]:
     """Search the product catalog by query and filters.
 
     Args:

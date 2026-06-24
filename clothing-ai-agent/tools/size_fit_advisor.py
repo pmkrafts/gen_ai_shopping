@@ -2,7 +2,9 @@ from langchain.tools import tool
 
 
 @tool
-def size_fit_advisor_tool(height: str, weight: str, body_type: str, product_category: str) -> str:
+def size_fit_advisor_tool(
+    height: str, weight: str, body_type: str, product_category: str
+) -> str:
     """Recommend a clothing size based on height, weight, body type, and product category."""
     # Rule-based fallback; can be enhanced with LLM reasoning later.
     size_map = {

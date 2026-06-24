@@ -3,7 +3,12 @@ from tools.manage_cart import manage_cart_tool
 
 
 @tool
-def update_cart_item_tool(product_id: str, size: str | None = None, color: str | None = None, quantity: int | None = None) -> dict:
+def update_cart_item_tool(
+    product_id: str,
+    size: str | None = None,
+    color: str | None = None,
+    quantity: int | None = None,
+) -> dict:
     """Update an existing item in the cart by product_id.
 
     Args:

@@ -3,7 +3,9 @@ from data.store import search_products
 
 
 @tool
-def budget_occasion_planner_tool(budget: float, occasion: str, gender: str | None = None) -> dict:
+def budget_occasion_planner_tool(
+    budget: float, occasion: str, gender: str | None = None
+) -> dict:
     """Plan a full outfit for an occasion within a budget."""
     categories = ["top", "trousers", "shoes", "accessory"]
     outfit = []
